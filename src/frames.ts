@@ -139,16 +139,18 @@ export function frameAfter(c: CanvasRenderingContext2D, layout: string, x: numbe
   c.restore();
 }
 
-/** A small picture of the frame for its picker button, drawn with the same paths as the page. */
-export function drawFrameIcon(canvas: HTMLCanvasElement, layout: Layout, fill: string, bg: string) {
+/** A small picture of the frame for its picker button: a scrap of page paper with the frame on it,
+ * drawn with the same paths as the page. The frame is drawn at a reduced size so its paper details show. */
+export function drawFrameIcon(canvas: HTMLCanvasElement, layout: Layout, fill: string, paper: string) {
   const ratio = window.devicePixelRatio || 1, size = 40;
   canvas.width = size * ratio; canvas.height = size * ratio;
   const c = canvas.getContext('2d')!; c.scale(ratio, ratio);
-  const [bx, by, bw, bh] = frameDef(layout).box.map(v => v * 100);
-  const pad = layout === 'film' ? 40 : layout === 'instant' ? 30 : 22, k = (size - 4) / (Math.max(bw, bh) + pad * 2);
-  c.translate(size / 2, size / 2); c.scale(k, k); c.translate(-(bx + bw / 2), -(by + bh / 2));
-  if (layout === 'instant') { c.fillStyle = '#fffefa'; c.fillRect(bx - 22, by - 22, bw + 44, bh + 110); }
-  frameBefore(c, layout, bx, by, bw, bh, bg);
-  c.fillStyle = fill; c.beginPath(); shapePath(c, layout, bx, by, bw, bh); c.fill();
-  frameAfter(c, layout, bx, by, bw, bh);
+  c.fillStyle = paper; c.beginPath(); c.roundRect(2, 2, size - 4, size - 4, 3); c.fill();
+  const [, , w0, h0] = frameDef(layout).box.map(v => v * 100), fit = 230 / Math.max(w0, h0), bw = w0 * fit, bh = h0 * fit;
+  const pad = layout === 'film' ? 46 : layout === 'instant' ? 40 : 30, k = (size - 10) / (Math.max(bw, bh) + pad * 2);
+  c.translate(size / 2, size / 2); c.scale(k, k); c.translate(-bw / 2, -bh / 2 + (layout === 'instant' ? -18 : 0));
+  if (layout === 'instant') { c.fillStyle = '#fffefa'; c.fillRect(-16, -16, bw + 32, bh + 70); c.strokeStyle = '#d4cec0'; c.lineWidth = 3; c.strokeRect(-16, -16, bw + 32, bh + 70); }
+  frameBefore(c, layout, 0, 0, bw, bh, paper);
+  c.fillStyle = fill; c.beginPath(); shapePath(c, layout, 0, 0, bw, bh); c.fill();
+  frameAfter(c, layout, 0, 0, bw, bh);
 }
