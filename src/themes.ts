@@ -1,3 +1,4 @@
+import {shapePath,CURVED,DRESSED} from './frames';
 export type Theme = 'original' | 'poe' | 'victorian' | 'conservatory';
 export type Paper = 'light' | 'dark';
 export const themes: Record<Theme, {name:string; description:string; accent:string; dark:string; ink:string; muted:string; gilding:string}> = {
@@ -27,17 +28,14 @@ export function ornament(c:CanvasRenderingContext2D,theme:Theme,color:string){
 export function photoPath(c:CanvasRenderingContext2D,layout:string,theme:Theme,x:number,y:number,w:number,h:number){
  c.beginPath();
  if(layout==='window'&&(theme==='poe'||theme==='conservatory')){c.moveTo(x,y+h);c.lineTo(x,y+w*.47);c.bezierCurveTo(x,y+w*.26,x+w*.3,y+w*.06,x+w/2,y);c.bezierCurveTo(x+w*.7,y+w*.06,x+w,y+w*.26,x+w,y+w*.47);c.lineTo(x+w,y+h);c.closePath();}
- else if(layout==='window')c.roundRect(x,y,w,h,[w/2,w/2,4,4]);
- else if(layout==='circle'||layout==='oval')c.ellipse(x+w/2,y+h/2,w/2,h/2,0,0,Math.PI*2);
- else if(layout==='heart'){c.moveTo(x+w*.5,y+h*.25);c.bezierCurveTo(x+w*.5,y,x,y,x,y+h*.32);c.bezierCurveTo(x,y+h*.6,x+w*.35,y+h*.75,x+w*.5,y+h);c.bezierCurveTo(x+w*.65,y+h*.75,x+w,y+h*.6,x+w,y+h*.32);c.bezierCurveTo(x+w,y,x+w*.5,y,x+w*.5,y+h*.25);c.closePath();}
- else c.rect(x,y,w,h);
+ else shapePath(c,layout,x,y,w,h);
 }
 export function frameDecoration(c:CanvasRenderingContext2D,theme:Theme,layout:string,color:string,x:number,y:number,w:number,h:number){
- if(theme==='original')return;
+ if(theme==='original'||DRESSED.has(layout))return;
  c.save();c.strokeStyle=color;c.lineWidth=1.25;photoPath(c,layout,theme,x+3,y+3,w-6,h-6);c.stroke();
  // Fine double rules and tiny corner diamonds evoke nineteenth-century bindings.
  if(theme!=='poe'){c.lineWidth=.65;photoPath(c,layout,theme,x+6,y+6,w-12,h-12);c.stroke();}
  // Corner diamonds only sit on shapes that have corners.
- if(!['circle','oval','heart'].includes(layout))for(const [px,py] of [[x+9,y+h-9],[x+w-9,y+h-9]]){c.beginPath();c.moveTo(px,py-3);c.lineTo(px+3,py);c.lineTo(px,py+3);c.lineTo(px-3,py);c.closePath();c.stroke();}
+ if(!CURVED.has(layout))for(const [px,py] of [[x+9,y+h-9],[x+w-9,y+h-9]]){c.beginPath();c.moveTo(px,py-3);c.lineTo(px+3,py);c.lineTo(px,py+3);c.lineTo(px-3,py);c.closePath();c.stroke();}
  c.restore();
 }

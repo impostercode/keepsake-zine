@@ -2,7 +2,7 @@ import {test,expect} from '@playwright/test';
 import {mkdir,readFile} from 'node:fs/promises';
 import {unzipSync} from 'fflate';
 test('instant frame portraits, landscapes, themes, depth, recovery and exports',async({page})=>{
- await mkdir('output/instant',{recursive:true});page.on('dialog',d=>d.accept());await page.goto('/');await expect(page.locator('[data-layout]')).toHaveCount(11);
+ await mkdir('output/instant',{recursive:true});page.on('dialog',d=>d.accept());await page.goto('/');await expect(page.locator('[data-layout]')).toHaveCount(23);
  const images=await page.evaluate(()=>[false,true].map(landscape=>{const c=document.createElement('canvas');c.width=landscape?2000:1500;c.height=landscape?1500:2000;const x=c.getContext('2d')!;x.fillStyle='#baa17e';x.fillRect(0,0,c.width,c.height);x.fillStyle='#7e9272';x.fillRect(c.width*.12,c.height*.12,c.width*.76,c.height*.76);x.fillStyle='#f0e3c6';x.font='72px Georgia';x.fillText(landscape?'A wider world':'A little moment',200,700);x.fillStyle='#6d5544';x.fillRect(0,0,80,c.height);x.fillRect(0,0,c.width,80);return c.toDataURL('image/png')}));
  const legacy={version:1,name:'Instant test',accent:'#8a4f3d',font:'serif',pages:Array.from({length:8},(_,i)=>({id:String(i),title:i===2?'W'.repeat(70):'Page '+(i+1)+' · A little memory',caption:i===2?'W'.repeat(180):'The ordinary days, the extraordinary people. A moment worth keeping.',image:images[i%2],fit:i%4>1?'fit':'fill',x:50,y:50,layout:'classic'}))};
  await page.locator('#project-file').setInputFiles({name:'legacy.keepsake',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(legacy))});await expect(page.locator('#depth-label')).toBeHidden();
