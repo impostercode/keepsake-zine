@@ -1,0 +1,3 @@
+import js from '@eslint/js';
+import ts from 'typescript-eslint';
+export default ts.config(js.configs.recommended,...ts.configs.recommended,{files:['src/**/*.ts'],languageOptions:{globals:{Worker:'readonly',clearTimeout:'readonly',document:'readonly',window:'readonly',Image:'readonly',FileReader:'readonly',URL:'readonly',Blob:'readonly',confirm:'readonly',crypto:'readonly',setTimeout:'readonly',structuredClone:'readonly',HTMLInputElement:'readonly',HTMLSelectElement:'readonly',HTMLButtonElement:'readonly',HTMLElement:'readonly',HTMLImageElement:'readonly',HTMLCanvasElement:'readonly',CanvasRenderingContext2D:'readonly',File:'readonly',FileList:'readonly'}}});

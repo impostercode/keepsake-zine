@@ -1,0 +1,17 @@
+node_modules/
+dist/
+output/
+test-results/
+.vercel/
+
+# Local files, saved projects, and generated decoder artifacts
+.DS_Store
+.env
+.env.*
+*.keepsake
+playwright-report/
+public/vendor/libheif.js
+public/licenses/heic-to-LGPL.txt
+public/licenses/keepsake-heic-source.zip
+public/licenses/libheif-*.tar.gz
+public/licenses/libde265-*.tar.gz
