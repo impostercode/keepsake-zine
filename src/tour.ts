@@ -74,6 +74,7 @@ export function initTour(replayButton: HTMLButtonElement) {
     index = i;
     const step = STEPS[i];
     clearTarget();
+    document.body.classList.add('touring');
     title.textContent = step.title;
     body.textContent = step.body;
     count.textContent = `${i + 1} of ${STEPS.length}`;
@@ -95,6 +96,7 @@ export function initTour(replayButton: HTMLButtonElement) {
 
   const close = () => {
     clearTarget();
+    document.body.classList.remove('touring');
     shade.hidden = true;
     card.hidden = true;
     markSeen();
