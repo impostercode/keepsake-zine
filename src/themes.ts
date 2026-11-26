@@ -37,6 +37,7 @@ export function frameDecoration(c:CanvasRenderingContext2D,theme:Theme,layout:st
  c.save();c.strokeStyle=color;c.lineWidth=1.25;photoPath(c,layout,theme,x+3,y+3,w-6,h-6);c.stroke();
  // Fine double rules and tiny corner diamonds evoke nineteenth-century bindings.
  if(theme!=='poe'){c.lineWidth=.65;photoPath(c,layout,theme,x+6,y+6,w-12,h-12);c.stroke();}
- for(const [px,py] of [[x+9,y+h-9],[x+w-9,y+h-9]]){c.beginPath();c.moveTo(px,py-3);c.lineTo(px+3,py);c.lineTo(px,py+3);c.lineTo(px-3,py);c.closePath();c.stroke();}
+ // Corner diamonds only sit on shapes that have corners.
+ if(!['circle','oval','heart'].includes(layout))for(const [px,py] of [[x+9,y+h-9],[x+w-9,y+h-9]]){c.beginPath();c.moveTo(px,py-3);c.lineTo(px+3,py);c.lineTo(px,py+3);c.lineTo(px-3,py);c.closePath();c.stroke();}
  c.restore();
 }
