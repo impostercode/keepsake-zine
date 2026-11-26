@@ -27,7 +27,10 @@ export function ornament(c:CanvasRenderingContext2D,theme:Theme,color:string){
 export function photoPath(c:CanvasRenderingContext2D,layout:string,theme:Theme,x:number,y:number,w:number,h:number){
  c.beginPath();
  if(layout==='window'&&(theme==='poe'||theme==='conservatory')){c.moveTo(x,y+h);c.lineTo(x,y+w*.47);c.bezierCurveTo(x,y+w*.26,x+w*.3,y+w*.06,x+w/2,y);c.bezierCurveTo(x+w*.7,y+w*.06,x+w,y+w*.26,x+w,y+w*.47);c.lineTo(x+w,y+h);c.closePath();}
- else if(layout==='window')c.roundRect(x,y,w,h,[w/2,w/2,4,4]);else c.rect(x,y,w,h);
+ else if(layout==='window')c.roundRect(x,y,w,h,[w/2,w/2,4,4]);
+ else if(layout==='circle'||layout==='oval')c.ellipse(x+w/2,y+h/2,w/2,h/2,0,0,Math.PI*2);
+ else if(layout==='heart'){c.moveTo(x+w*.5,y+h*.25);c.bezierCurveTo(x+w*.5,y,x,y,x,y+h*.32);c.bezierCurveTo(x,y+h*.6,x+w*.35,y+h*.75,x+w*.5,y+h);c.bezierCurveTo(x+w*.65,y+h*.75,x+w,y+h*.6,x+w,y+h*.32);c.bezierCurveTo(x+w,y,x+w*.5,y,x+w*.5,y+h*.25);c.closePath();}
+ else c.rect(x,y,w,h);
 }
 export function frameDecoration(c:CanvasRenderingContext2D,theme:Theme,layout:string,color:string,x:number,y:number,w:number,h:number){
  if(theme==='original')return;
