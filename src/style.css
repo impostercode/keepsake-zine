@@ -6,3 +6,20 @@
 .layouts{grid-template-columns:repeat(3,minmax(0,1fr))}.frame-icon.instant{border-color:#fffefa;border-bottom-width:9px}.controls .depth-control{font-weight:normal;line-height:1.5;margin:14px 0}.controls .depth-control input{display:inline-block;width:auto;vertical-align:middle;margin:0 6px 0 0;accent-color:#867358}
 .import-status{overflow-wrap:anywhere;color:#80523f;max-height:140px;overflow:auto}footer a{color:inherit}.sequence details p{font-size:10px}
 #mini-options{max-width:520px;margin-top:16px}#mini-options p{font-size:11px}#mini-options summary,#mini-options a{font-size:11px;color:#59624f}#mini-warning{color:#80523f!important}#mini-preview canvas{display:block;width:100%;height:auto;box-shadow:0 3px 12px #0002;margin:16px 0}.mini-toggle{display:flex;gap:8px;align-items:center;font-size:12px}.mini-toggle input{accent-color:#867358}
+/* Layout fixes: header grows with its content, controls split into page and book groups, phone flow puts adding photos first. */
+header{height:auto;min-height:92px;padding-top:14px;padding-bottom:14px}
+.control-group .panel-heading{margin-bottom:6px}.controls>hr{margin:26px 0 22px}
+.print-steps summary{cursor:pointer;list-style-position:outside}.print-steps summary h3{display:inline;margin:0}.print-steps[open] summary{margin-bottom:14px}.print-notes>details+details{margin-top:14px}
+@media(max-width:800px){
+header{min-height:0;padding:12px 5%}
+.wide-only{display:none}
+.file-actions button{min-height:44px;padding:8px 14px}
+.intro{padding:22px 0 24px}.intro h1{font-size:32px}
+.sequence{order:0;border-top:0}.preview-panel{order:1;border-top:1px solid var(--line);padding:22px 20px}.controls{order:2}
+.preview-nav button{min-width:44px;min-height:44px}
+.sequence .drop{flex-direction:row;justify-content:center;padding:14px;gap:10px}.sequence .drop span:not(.plus),.sequence .drop small{display:none}.drop .plus{display:inline;font-size:20px}
+
+input:not([type=range]):not([type=color]):not([type=checkbox]),textarea,select{font-size:16px!important}
+.controls button,.layouts button{min-height:44px}
+.export-choice{max-width:none}.export-choice select{width:100%}#export{width:100%}
+}
