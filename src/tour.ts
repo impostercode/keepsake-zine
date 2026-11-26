@@ -84,9 +84,13 @@ export function initTour(replayButton: HTMLButtonElement) {
     if (target) {
       current = target;
       target.classList.add('tour-target');
+      // Keep the card off the highlighted column on wide screens.
+      const box = target.getBoundingClientRect();
+      card.classList.toggle('tour-left', box.left > window.innerWidth / 2);
       const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       target.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
     } else {
+      card.classList.remove('tour-left');
       window.scrollTo({ top: 0 });
     }
     shade.hidden = false;
