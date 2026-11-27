@@ -1,9 +1,9 @@
 import {ensureFont,fontFamily,fontScale} from './fonts';
 import {palette, ornament, photoPath, frameDecoration, type Theme, type Paper} from './themes';
 import {LAYOUTS,layoutLabel,frameDef,frameBefore,frameAfter,type Layout} from './frames';
-import {drawPanels,narrationBox,speechBubble,panelBox,panelCount,type ComicLayout} from './comic';
+import {drawPanels,narrationBox,speechBubble,panelBubble,panelBox,panelCount,type ComicLayout} from './comic';
 export {LAYOUTS,layoutLabel,type Layout};
-export interface Page {id:string;title:string;caption:string;image?:string;fit:'fill'|'fit';x:number;y:number;layout:Layout;depth?:boolean;comic?:ComicLayout;panels?:(PanelPhoto|null)[]}
+export interface Page {id:string;title:string;caption:string;image?:string;fit:'fill'|'fit';x:number;y:number;layout:Layout;depth?:boolean;comic?:ComicLayout;panels?:(PanelPhoto|null)[];bubbles?:string[]}
 /** A comic panel's own photo and focal point (panel 1 uses the page's image, x and y). */
 export interface PanelPhoto {image:string;x:number;y:number}
 export interface Project {version:1;name:string;accent:string;font:string;captionFont?:string;style?:'keepsake'|'comic';theme:Theme;paper:Paper;pages:Page[]}
@@ -25,7 +25,9 @@ async function renderComic(canvas:HTMLCanvasElement,c:CanvasRenderingContext2D,p
  const slots=[p.image?{image:p.image,x:p.x,y:p.y}:null,...(p.panels??[])].slice(0,panelCount(p.comic));
  const images=await Promise.all(slots.map(async s=>({image:s?await loadImage(s.image):undefined,fit:p.fit,x:s?.x??50,y:s?.y??50})));
  drawPanels(c,p.comic,images);
- narrationBox(c,p.comic,p.title,fontFamily(project.font,'serif'),Math.round(22*fontScale(project.font)));
+ const narrationBottom=narrationBox(c,p.comic,p.title,fontFamily(project.font,'serif'),Math.round(22*fontScale(project.font)));
+ const bubbleFont=fontFamily(project.captionFont??'sans','sans'),bubbleSize=Math.round(14*fontScale(project.captionFont));
+ (p.bubbles??[]).slice(0,panelCount(p.comic)).forEach((t,i)=>panelBubble(c,p.comic,i,t??'',bubbleFont,bubbleSize,i===0?narrationBottom:0));
  speechBubble(c,p.comic,p.caption,fontFamily(project.captionFont??'sans','sans'),Math.round(15*fontScale(project.captionFont)));
  c.fillStyle='#111';c.font='10px Arial';c.fillText(String(index+1).padStart(2,'0'),480,812);
  return canvas}
