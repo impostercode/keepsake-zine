@@ -43,6 +43,8 @@ $('#depth').addEventListener('change',()=>{current().depth=$<HTMLInputElement>('
 // This page as a tabbed mini editor on phones: one group of controls at a time, next to the page it changes.
 function showTab(tab:string){const ed=$('#page-editor');ed.dataset.tab=tab;ed.querySelectorAll<HTMLButtonElement>('[role=tab]').forEach(b=>{const on=b.dataset.tab===tab;b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1})}
 showTab('words');
+// Keep the tabs just under the pinned page preview while scrolling the editor on phones.
+new ResizeObserver(()=>$('.workspace').style.setProperty('--pin-h',$('.preview-panel').offsetHeight+'px')).observe($('.preview-panel'));
 $('#page-editor').querySelector('.editor-tabs')!.addEventListener('click',e=>{const b=(e.target as HTMLElement).closest<HTMLElement>('[data-tab]');if(b)showTab(b.dataset.tab!)});
 $('#page-editor').querySelector('.editor-tabs')!.addEventListener('keydown',e=>{const k=(e as KeyboardEvent).key;if(k!=='ArrowRight'&&k!=='ArrowLeft')return;const tabs=['words','frame','photo'],i=tabs.indexOf($('#page-editor').dataset.tab!),n=tabs[(i+(k==='ArrowRight'?1:2))%3];showTab(n);$('#tab-'+n).focus()});
 $('#bubble').addEventListener('input',()=>{const p=current(),k=activeSlot(),b=p.bubbles??[];while(b.length<=k)b.push('');b[k]=$<HTMLTextAreaElement>('#bubble').value.slice(0,80);while(b.length&&!b[b.length-1])b.pop();if(b.length)p.bubbles=b;else delete p.bubbles;changed()});
