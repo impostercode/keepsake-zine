@@ -44,3 +44,4 @@ input:not([type=range]):not([type=color]):not([type=checkbox]),textarea,select{f
 .slot.active{border-color:#8e7155;background:#f0e9da}
 .slot-thumb{display:grid;place-items:center;width:min(38px,100%);height:auto;aspect-ratio:1;border-radius:3px;background:#efe9dc;color:#8e7155;font-size:18px;line-height:1}
 .panel-note{display:block;margin-top:6px}
+.bubble-field{margin-top:12px}

@@ -87,8 +87,8 @@ function wrap(c: CanvasRenderingContext2D, text: string, maxW: number) {
 }
 
 /** Title as a yellow narration box in panel 1's top-left corner. */
-export function narrationBox(c: CanvasRenderingContext2D, id: string | undefined, text: string, font: string, size: number) {
-  if (!text.trim()) return;
+export function narrationBox(c: CanvasRenderingContext2D, id: string | undefined, text: string, font: string, size: number): number {
+  if (!text.trim()) return 0;
   const b = bounds(comicDef(id).panels[0].map(p => toPage(p))), pad = 9, maxW = Math.min(300, b.w - 40);
   let s = size, lines: string[] = [];
   for (; s >= 12; s--) { c.font = `${s}px ${font}`; lines = wrap(c, text, maxW - pad * 2); if (lines.length <= 3) break; }
@@ -96,6 +96,7 @@ export function narrationBox(c: CanvasRenderingContext2D, id: string | undefined
   const w = Math.max(...lines.map(l => c.measureText(l).width)) + pad * 2, h = lines.length * s * 1.2 + pad * 2 - s * .2, x = b.x + GUTTER / 2 + INK + 8, y = b.y + GUTTER / 2 + INK + 8;
   c.save(); c.fillStyle = '#ffe56b'; c.fillRect(x, y, w, h); c.strokeStyle = '#111'; c.lineWidth = 2; c.strokeRect(x, y, w, h);
   c.fillStyle = '#111'; c.textBaseline = 'top'; lines.forEach((l, i) => c.fillText(l, x + pad, y + pad + i * s * 1.2)); c.restore();
+  return y + h;
 }
 
 /** Caption as a speech bubble near the bottom of the last panel, tail pointing up-left into the panel. */
@@ -113,6 +114,26 @@ export function speechBubble(c: CanvasRenderingContext2D, id: string | undefined
   c.moveTo(x + w * .3, y + h * .12); c.lineTo(x + w * .12 - 18, y - 26); c.lineTo(x + w * .42, y + h * .06);
   c.fill(); c.stroke();
   // Cover the tail's join with the bubble so the outline reads as one shape.
+  c.beginPath(); c.ellipse(x + w / 2, y + h / 2, w / 2 - 1.5, h / 2 - 1.5, 0, 0, Math.PI * 2); c.fill();
+  c.fillStyle = '#111'; c.textAlign = 'center'; c.textBaseline = 'top';
+  lines.forEach((l, i) => c.fillText(l, x + w / 2, y + (h - th) / 2 + i * s * 1.25)); c.restore();
+}
+
+/** A panel's own speech bubble: top-right of the panel, tail pointing down-left toward the photo.
+ *  `below` pushes it under the narration box when both sit in panel 1. */
+export function panelBubble(c: CanvasRenderingContext2D, id: string | undefined, panel: number, text: string, font: string, size: number, below = 0) {
+  const panels = comicDef(id).panels; if (!text.trim() || panel >= panels.length) return;
+  const b = bounds(panels[panel].map(p => toPage(p))), inset = GUTTER / 2 + INK + 12;
+  const maxW = Math.min(200, b.w * .6);
+  let s = size, lines: string[] = [];
+  for (; s >= 9; s--) { c.font = `${s}px ${font}`; lines = wrap(c, text, maxW); if (lines.length <= 4) break; }
+  lines = lines.slice(0, 4);
+  const tw = Math.max(...lines.map(l => c.measureText(l).width)), th = lines.length * s * 1.25;
+  const w = tw / .76 + 12, h = th / .7 + 10, x = b.x + b.w - w - inset, y = Math.max(b.y + inset, below + 8);
+  c.save(); c.fillStyle = '#fffdf8'; c.strokeStyle = '#111'; c.lineWidth = 2.5;
+  c.beginPath(); c.ellipse(x + w / 2, y + h / 2, w / 2, h / 2, 0, 0, Math.PI * 2);
+  c.moveTo(x + w * .28, y + h * .86); c.lineTo(x + w * .14 - 16, y + h + 24); c.lineTo(x + w * .44, y + h * .94);
+  c.fill(); c.stroke();
   c.beginPath(); c.ellipse(x + w / 2, y + h / 2, w / 2 - 1.5, h / 2 - 1.5, 0, 0, Math.PI * 2); c.fill();
   c.fillStyle = '#111'; c.textAlign = 'center'; c.textBaseline = 'top';
   lines.forEach((l, i) => c.fillText(l, x + w / 2, y + (h - th) / 2 + i * s * 1.25)); c.restore();
