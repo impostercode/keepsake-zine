@@ -19,7 +19,7 @@ const STEPS: Step[] = [
   {
     target: '.controls',
     title: '2. Make each page yours',
-    body: 'Pick a page, then add a title, a caption and a frame. Whole book sets the name, theme and fonts for every page.',
+    body: 'Pick a page, then add a title, a caption and a frame. Whole book sets the name, theme and fonts. Switch Book style to Comic book for panel layouts and speech bubbles.',
   },
   {
     target: '.finish',
