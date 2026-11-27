@@ -11,7 +11,7 @@ export async function readPhoto(file:File,progress:(message:string)=>void):Promi
  if(heif){
   progress('Converting HEIC locally…');
   const result=await new Promise<{blob:Blob;count:number}>((resolve,reject)=>{
-   const worker=new Worker('/vendor/heic-worker.js',{type:'module'});
+   const worker=new Worker(import.meta.env.BASE_URL+'vendor/heic-worker.js',{type:'module'});
    const timeout=setTimeout(()=>{worker.terminate();reject(Error('HEIC conversion timed out. Try a smaller image or export JPEG from Photos.'));},60000);
    const finish=()=>{clearTimeout(timeout);worker.terminate()};
    worker.onmessage=e=>{finish();if(e.data.error)reject(Error(e.data.error));else resolve(e.data)};
